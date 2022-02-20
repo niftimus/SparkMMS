@@ -1,13 +1,13 @@
 # SparkMMS Reader
 Custom Electricity Market Management System (MMS) CSV reader library for Apache Spark.
 
-This library can be used to efficiently read MMS data model reports in bulk.
+This library can be used to efficiently read MMS data model reports in bulk - e.g. from monthly DVDs:
+(http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2021/MMSDM_2021_08/MMSDM_Historical_Data_SQLLoader/DOCUMENTATION/Participant_Monthly_DVD.pdf)
 
 It uses Spark's DataSource V2 API.
 
 It reads files in AEMO's CSV format:
-
-(http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2021/MMSDM_2021_08/MMSDM_Historical_Data_SQLLoader/DOCUMENTATION/Participant_Monthly_DVD.pdf)
+(https://aemo.com.au/-/media/files/market-it-systems/guide-to-csv-data-format-standard.pdf?la=en)
 
 ## Features
 - Partitions large files to avoid out of memory (OOM) errors
@@ -94,7 +94,7 @@ d.show(20, False)
 - Register the report as a temporary table and query using SQL:
 ```python
 # Register all reports available in the dataframe as temporary view in the metastore
-def registerAllReports(df=df):
+def registerAllReports(df):
     tmpDF = df.select("report_type","report_subtype","report_version")
     tmpDF = tmpDF.dropDuplicates()
     

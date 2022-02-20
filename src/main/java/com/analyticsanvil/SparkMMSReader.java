@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.lang3.ObjectUtils;
@@ -82,6 +83,8 @@ public class SparkMMSReader implements Closeable, Iterable<Object[]> {
     private ZipInputStream zis=null;
     private ZipEntry zipEntry=null;
     private boolean isInitialised = false;
+    final Pattern SPLIT_REGEXP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+    //private final String SPLIT_REGEXP =  ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
 
     /***
      * Convert to Spark compatible timestamp string based on date and time.
@@ -195,7 +198,7 @@ else {
     {
         
         try {
-            this.currentLine = br.readLine().split(",");
+            this.currentLine = SPLIT_REGEXP_PATTERN.split(br.readLine());
 
             if (this.currentLine == null) {
                 
@@ -463,7 +466,7 @@ private void parse_report() {
                             this.hasnext = false;
                         }
                     }
-                    currentLine = this.currentLineNoSplit.split(",");
+                    currentLine = SPLIT_REGEXP_PATTERN.split(this.currentLineNoSplit);
                     if(hasnext) 
                     {
                         this.report_type = currentLine[1];
@@ -497,7 +500,7 @@ private void parse_report() {
                     if ((!splitFile) || ((rowsRead>this.startRow) && (rowsRead<=this.startRow+this.maxRowsPerPartition)))
                     {
                         // Add data rows if the current row is within range (for split files) or all rows if this file doesn't need splitting
-                        currentLine = this.currentLineNoSplit.split(",");
+                        currentLine = SPLIT_REGEXP_PATTERN.split(this.currentLineNoSplit);
                         data.add(Arrays.copyOfRange(currentLine, 4, currentLine.length));
                     }
                     
@@ -507,7 +510,7 @@ private void parse_report() {
                 }
                 
                 // Split the current unsplit line as the next pass will need elements
-                this.nextLine = this.currentLineNoSplit.split(",");
+                this.nextLine = currentLine = SPLIT_REGEXP_PATTERN.split(this.currentLineNoSplit);
                 this.currentLine = this.nextLine;
                 
                 

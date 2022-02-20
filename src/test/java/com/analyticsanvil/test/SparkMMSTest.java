@@ -8,6 +8,7 @@ package com.analyticsanvil.test;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_DUDETAILSUMMARY_CSV;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_DUDETAILSUMMARY_ZIP;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_FAIL_DIFFERENT_FILENAME_IN_ZIP;
+import static com.analyticsanvil.SparkMMSConstants.FILEPATH_FIELD_SEPARATOR_QUOTED_CSV;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TRADINGLOAD_CSV;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP;
 import com.analyticsanvil.SparkMMSData;
@@ -204,5 +205,24 @@ public class SparkMMSTest {
         assertEquals(5, df2count);        
         
     }
+    
+    /**
+    * Validate line split with string containing commas (field separator in quoted field).
+    */
+    @Test
+    public void testFieldSeparatorInQuotedField()
+    {
+        
+        df = spark.read().format("com.analyticsanvil.SparkMMS").option("fileName", FILEPATH_FIELD_SEPARATOR_QUOTED_CSV).option("maxRowsPerPartition", "50000").load();
+        Dataset<Row> df1 = getReport(df,"MARKET_NOTICE","MARKETNOTICETYPE",1);
+        
+        long df1count = df1.count();
+        String field_check = (String) df1.filter("TYPEID = '\"NEM SYSTEMS\"'").select("DESCRIPTION").collectAsList().get(0).getString(0);
+        
+        assertEquals(32, df1count);
+        assertEquals("\"MMS, EMS, SCADA, IT, BIDDING\"", field_check);
+        
+    }
+
 
 }

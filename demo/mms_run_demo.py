@@ -26,7 +26,7 @@ d=getReport(df, report_type = 'TRADING', report_subtype = 'UNIT_SOLUTION', repor
 d.show(20, False)
 
 # Register all reports available in the dataframe as temporary view in the metastore
-def registerAllReports(df=df):
+def registerAllReports(df):
     tmpDF = df.select("report_type","report_subtype","report_version")
     tmpDF = tmpDF.dropDuplicates()
     

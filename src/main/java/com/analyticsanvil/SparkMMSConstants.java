@@ -38,7 +38,8 @@ public final class SparkMMSConstants {
     public static final String FILEPATH_DUDETAILSUMMARY_CSV = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_DUDETAILSUMMARY_202010010000.CSV").getAbsolutePath();
     public static final String FILEPATH_DUDETAILSUMMARY_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_DUDETAILSUMMARY_202010010000.zip").getAbsolutePath();
     public static final String FILEPATH_FAIL_DIFFERENT_FILENAME_IN_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_AUCTION_CALENDAR_202010010000_DifferentFilenameInZip").getAbsolutePath();
-    public static final String FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_TRADINGREGIONSUM_TRADINGREGIONPRICE_MultipleReportsInFile.zip").getAbsolutePath();
+    public static final String FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_TRADINGREGIONSUM_TRADINGREGIONPRICE_MultipleReportsInFile.zip").getAbsolutePath();   
+    public static final String FILEPATH_FIELD_SEPARATOR_QUOTED_CSV = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_MARKETNOTICETYPE_202010010000.CSV").getAbsolutePath();
     public static final String WASBPATH_ALL_CSV = "wasb://data@storageemulator/*.CSV";
     
     // Default schema
