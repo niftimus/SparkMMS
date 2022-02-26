@@ -41,7 +41,7 @@ mvn install
 ```
 - Confirm the JAR library is built:
 ```bash
-ls -la ./target/SparkMMS-0.2-SNAPSHOT.jar
+ls -la ./target/SparkMMS-0.3-SNAPSHOT.jar
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ ls -la ./target/SparkMMS-0.2-SNAPSHOT.jar
 # Ensure SPARK_HOME is set to the directory where Spark has been uncompressed
 # export SPARK_HOME = <path_to_spark>
 cd SparkMMS
-$SPARK_HOME/bin/pyspark --jars ./target/SparkMMS-0.2-SNAPSHOT.jar --packages org.apache.hadoop:hadoop-azure:3.3.1,org.apache.hadoop:hadoop-aws:3.2.2
+$SPARK_HOME/bin/pyspark --jars ./target/SparkMMS-0.3-SNAPSHOT.jar --packages org.apache.hadoop:hadoop-azure:3.3.1,org.apache.hadoop:hadoop-aws:3.2.2
 ```
 
 ## Demo (within PySpark shell)

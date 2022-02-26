@@ -11,6 +11,11 @@ import static com.analyticsanvil.SparkMMSConstants.FILEPATH_FAIL_DIFFERENT_FILEN
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_FIELD_SEPARATOR_QUOTED_CSV;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TRADINGLOAD_CSV;
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP;
+import static com.analyticsanvil.SparkMMSConstants.FILEPATH_ALL_TEST_FILES;
+import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP2;
+import static com.analyticsanvil.SparkMMSConstants.STRING_REPORT_SUBTYPE;
+import static com.analyticsanvil.SparkMMSConstants.STRING_REPORT_TYPE;
+import static com.analyticsanvil.SparkMMSConstants.STRING_REPORT_VERSION;
 import com.analyticsanvil.SparkMMSData;
 import static com.analyticsanvil.SparkMMSData.registerAllReports;
 import org.apache.spark.SparkConf;
@@ -224,5 +229,31 @@ public class SparkMMSTest {
         
     }
 
+    /**
+    * Validate pushdown filter where there are multiple report types in the read path.
+    */
+    @Test
+    public void testMultipleReportsInReadPath()
+    {
+        Row firstRow;
+        df = spark.read().format("com.analyticsanvil.SparkMMS").option("fileName", FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP2).option("maxRowsPerPartition", "50000").load();
+        Dataset<Row> df1 = df.where(STRING_REPORT_TYPE+"='OFFER' and " + STRING_REPORT_SUBTYPE+"='BIDDAYOFFER' and " + STRING_REPORT_VERSION+"=2");
+        df1 = df1.select(STRING_REPORT_TYPE,STRING_REPORT_SUBTYPE,STRING_REPORT_VERSION).dropDuplicates();
+        df1.show();
+        
+        // Get count of distinct reports
+        long df1count = df1.count();
+        
+        firstRow = df1.collectAsList().get(0);
+        String field_check1 = firstRow.getString(0);
+        String field_check2 = firstRow.getString(1);
+        int field_check3 = firstRow.getInt(2);
+        
+        assertEquals(1, df1count);
+        assertEquals("OFFER", field_check1);
+        assertEquals("BIDDAYOFFER", field_check2);
+        assertEquals(2, field_check3);
+    }
+    
 
 }

@@ -1,6 +1,7 @@
 package com.analyticsanvil;
 
 import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TRADINGLOAD_CSV;
+import static com.analyticsanvil.SparkMMSConstants.FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP2;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -20,6 +21,10 @@ public class SparkMMSApplication {
     private boolean start() {
         SparkConf conf = new SparkConf();
 
+        // Declare dataframes 
+        Dataset<Row> df;
+        Dataset<Row> df1;
+        
         // Create Spark session
         SparkSession spark = SparkSession.builder()
                 .config(conf)
@@ -29,22 +34,22 @@ public class SparkMMSApplication {
         // Set log level to warning to suppress information messages
         spark.sparkContext().setLogLevel("WARN");
         
-        // Create dataframe 
-        Dataset<Row> df;        
-    
         // Load file
         df = spark.read().format("com.analyticsanvil.SparkMMS").option("fileName", FILEPATH_TRADINGLOAD_CSV).option("maxRowsPerPartition", "50000").option("minSplitFilesize","1000000").load();
         
         // Validate raw dataframe output
         df.show();
+        
+        // Print the schema
+        df.printSchema();
 
         // Validate partition count
         System.out.println("Partition count is: " + df.rdd().getNumPartitions());
-        System.out.println();
+        System.out.println();       
         
         // Register temporary view
         registerAllReports(df);
-
+        
         // Validate that temporary view is created
         spark.sql("show tables;").show(false);
 
@@ -62,6 +67,16 @@ public class SparkMMSApplication {
             System.out.println("Partition ID " + Integer.toString(r.getInt(0)) + " contains: " + Long.toString(r.getLong(1)));
         });
         System.out.println();
+
+        // Load new file
+        df1 = spark.read().format("com.analyticsanvil.SparkMMS").option("fileName", FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP2).option("maxRowsPerPartition", "50000").option("minSplitFilesize","1000000").load();       
+
+        // Validate pushdown
+        df1 = df1.where("report_type = 'OFFER' and report_subtype = 'BIDDAYOFFER' and report_version = '2'").select("report_type","report_subtype", "report_version").dropDuplicates();
+        df1.show();
+        
+        // Explain plan
+        df1.explain(true);
         
         return true;
     }

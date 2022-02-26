@@ -361,13 +361,15 @@ else {
     
     return false;
 }
-    
+
+// Returns true if this report should be excluded based on query filters, false otherwise    
 private boolean excludeThisReport(String report_type, String report_subtype, String report_version)
 {
-    boolean exclude = false;
     String s;
     List<String> sl;
     
+    // Iterate through query filters and check whether this report should be excluded
+    // Note - filters are not removed after evaluation because there may be another report in the file
     for(Object f : this.pushedFilters)
     {
         if (f instanceof org.apache.spark.sql.sources.EqualTo && ((EqualTo) f).value() instanceof String)
@@ -376,13 +378,13 @@ private boolean excludeThisReport(String report_type, String report_subtype, Str
             switch(((EqualTo) f).attribute()) {
                 
                 case STRING_REPORT_TYPE:
-                    if (!s.equals(report_type)) { this.pushedFilters.remove(f); return true;}
+                    if (!s.equals(report_type)) return true;
                     break;
                 case STRING_REPORT_SUBTYPE:
-                    if (!s.equals(report_subtype)) { this.pushedFilters.remove(f); return true;}
+                    if (!s.equals(report_subtype)) return true;
                     break;
                 case STRING_REPORT_VERSION:
-                    if (!s.equals(report_version)) { this.pushedFilters.remove(f); return true;}
+                    if (!s.equals(report_version)) return true;
                     break;                           
             }               
         }
@@ -392,13 +394,13 @@ private boolean excludeThisReport(String report_type, String report_subtype, Str
             switch(((In) f).attribute()) {
                 
                 case STRING_REPORT_TYPE:
-                    if (!sl.contains(report_type)) { this.pushedFilters.remove(f); return true;}
+                    if (!sl.contains(report_type)) return true;
                     break;
                 case STRING_REPORT_SUBTYPE:
-                    if (!sl.contains(report_subtype)) { this.pushedFilters.remove(f); return true;}
+                    if (!sl.contains(report_subtype)) return true;
                     break;
                 case STRING_REPORT_VERSION:
-                    if (!sl.contains(report_version)) { this.pushedFilters.remove(f); return true;}
+                    if (!sl.contains(report_version)) return true;
                     break;                           
             }
         }
@@ -409,11 +411,6 @@ private boolean excludeThisReport(String report_type, String report_subtype, Str
 }
     
 private void parse_report() {
-    String line;
-    String[] splitLine;
-    boolean skipReport = false;
-
-    //currentLine = nextLine;
 
     if (currentLine == null) {
         getNextLine();
@@ -450,8 +447,6 @@ private void parse_report() {
                 this.report_type = currentLine[1];
                 this.report_subtype = currentLine[2];
                 this.report_version = currentLine[3];
-//                this.column_headers = new String[currentLine.length-4];
-//                System.arraycopy(currentLine, 4, this.column_headers, 0, (currentLine.length)-4);
 
                 while(hasnext&&excludeThisReport(report_type, report_subtype, report_version))
                 {

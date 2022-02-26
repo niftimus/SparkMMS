@@ -140,7 +140,6 @@ public class SparkMMSScanBuilder implements ScanBuilder, SupportsPushDownFilters
                     case STRING_ID3:
                     case STRING_REPORT_TYPE:
                     case STRING_REPORT_SUBTYPE:
-                    case STRING_REPORT_VERSION:
                         tmpFilters.remove((Filter) f);
                         break;
                 }
@@ -155,6 +154,17 @@ public class SparkMMSScanBuilder implements ScanBuilder, SupportsPushDownFilters
                     case STRING_ID3:
                     case STRING_REPORT_TYPE:
                     case STRING_REPORT_SUBTYPE:
+                        tmpFilters.remove((Filter) f);
+                        break;
+                }
+            } else if (f instanceof org.apache.spark.sql.sources.EqualTo && ((EqualTo) f).value() instanceof Integer) {
+                switch (((EqualTo) f).attribute()) {
+                    case STRING_REPORT_VERSION:
+                        tmpFilters.remove((Filter) f);
+                        break;
+                }
+            } else if (f instanceof org.apache.spark.sql.sources.In && ((In) f).values() instanceof Integer[]) {
+                switch (((In) f).attribute()) {
                     case STRING_REPORT_VERSION:
                         tmpFilters.remove((Filter) f);
                         break;
@@ -225,7 +235,6 @@ public class SparkMMSScanBuilder implements ScanBuilder, SupportsPushDownFilters
                     case STRING_ID3:
                     case STRING_REPORT_TYPE:
                     case STRING_REPORT_SUBTYPE:
-                    case STRING_REPORT_VERSION:
                         tmpFilters.add((Filter) f);
                         break;
                 }
@@ -240,6 +249,17 @@ public class SparkMMSScanBuilder implements ScanBuilder, SupportsPushDownFilters
                     case STRING_ID3:                      
                     case STRING_REPORT_TYPE:
                     case STRING_REPORT_SUBTYPE:
+                        tmpFilters.add((Filter) f);
+                        break;
+                }
+            } else if (f instanceof org.apache.spark.sql.sources.EqualTo && ((EqualTo) f).value() instanceof Integer) {
+                switch (((EqualTo) f).attribute()) {
+                    case STRING_REPORT_VERSION:
+                        tmpFilters.add((Filter) f);
+                        break;
+                }
+            } else if (f instanceof org.apache.spark.sql.sources.In && ((In) f).values() instanceof Integer[]) {
+                switch (((In) f).attribute()) {
                     case STRING_REPORT_VERSION:
                         tmpFilters.add((Filter) f);
                         break;

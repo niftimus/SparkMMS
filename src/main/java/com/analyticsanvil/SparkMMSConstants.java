@@ -40,6 +40,8 @@ public final class SparkMMSConstants {
     public static final String FILEPATH_FAIL_DIFFERENT_FILENAME_IN_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_AUCTION_CALENDAR_202010010000_DifferentFilenameInZip").getAbsolutePath();
     public static final String FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_TRADINGREGIONSUM_TRADINGREGIONPRICE_MultipleReportsInFile.zip").getAbsolutePath();   
     public static final String FILEPATH_FIELD_SEPARATOR_QUOTED_CSV = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_DVD_MARKETNOTICETYPE_202010010000.CSV").getAbsolutePath();
+    public static final String FILEPATH_ALL_TEST_FILES = new File("src/test/resources/com/analyticsanvil/test/").getAbsolutePath();
+    public static final String FILEPATH_TWO_REPORTS_SINGLE_FILE_ZIP2 = new File("src/test/resources/com/analyticsanvil/test/PUBLIC_NEXT_DAY_OFFER_ENERGY_20210101_0000000334263811_trimmed.zip").getAbsolutePath();
     public static final String WASBPATH_ALL_CSV = "wasb://data@storageemulator/*.CSV";
     
     // Default schema
