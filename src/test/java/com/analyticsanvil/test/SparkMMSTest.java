@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import static com.analyticsanvil.SparkMMSData.getReport;
+import org.apache.spark.SparkException;
 
 /**
  *
@@ -186,7 +187,7 @@ public class SparkMMSTest {
 
         // TODO: Update exception handling for zipfiles
         // Current test checks for failure if there is no CSV with the expected name in the zip file
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(SparkException.class, () -> {
             df.show();
         });
 

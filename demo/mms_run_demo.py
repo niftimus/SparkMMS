@@ -41,4 +41,3 @@ registerAllReports(df)
 spark.sql("show tables;").show()
 
 spark.sql("select * from TRADING_UNIT_SOLUTION_2").show()
-

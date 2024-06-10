@@ -28,8 +28,8 @@ Available from AEMO (Australian Energy Market Operator):
 
 - Prerequisites:
   - Maven
-  - JDK 1.8+
-  - Spark 3.1.2, prebuilt for Apache Hadoop 3.2 and later (https://spark.apache.org/downloads.html)
+  - OpenJDK 17
+  - Spark 3.5.1, prebuilt for Apache Hadoop 3.3 and later (https://spark.apache.org/downloads.html)
 - Clone this repository
 ```bash
 git clone https://github.com/niftimus/SparkMMS.git
@@ -41,7 +41,7 @@ mvn install
 ```
 - Confirm the JAR library is built:
 ```bash
-ls -la ./target/SparkMMS-0.3-SNAPSHOT.jar
+ls -la ./target/SparkMMS-0.4-SNAPSHOT.jar
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ ls -la ./target/SparkMMS-0.3-SNAPSHOT.jar
 # Ensure SPARK_HOME is set to the directory where Spark has been uncompressed
 # export SPARK_HOME = <path_to_spark>
 cd SparkMMS
-$SPARK_HOME/bin/pyspark --jars ./target/SparkMMS-0.3-SNAPSHOT.jar --packages org.apache.hadoop:hadoop-azure:3.3.1,org.apache.hadoop:hadoop-aws:3.2.2
+$SPARK_HOME/bin/pyspark --jars ./target/SparkMMS-0.4-SNAPSHOT.jar --packages org.apache.hadoop:hadoop-azure:3.4.0,org.apache.hadoop:hadoop-aws:3.4.0
 ```
 
 ## Demo (within PySpark shell)
